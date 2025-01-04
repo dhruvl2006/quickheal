@@ -1,7 +1,7 @@
 import React from "react";
 import visit from "../assests/visit.jpeg";
 import logo from "../assets/logo.png";
-import FAQSection from "./components/FAQ-Section";
+import FAQSection from "./components/FAQSection";
 import { Link } from "react-router-dom";
 function Home() {
   console.log(process.env.REACT_APP_SERVER_URL);

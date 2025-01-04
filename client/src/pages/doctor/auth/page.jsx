@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiCalls from "../../../core/APICalls";
-import Loader from "../../components/loader"
+import Loader from "../../components/Loader";
 import doctorImage from "../../../assets/doctor.png";
 import { FaArrowLeft } from "react-icons/fa"; // Add this import
 import "animate.css";
@@ -22,7 +22,7 @@ const LoginComponent = ({ setIsLogin }) => {
     setError("");
 
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await apiCalls.loginDoctor(email, password);
       if (response.status === 200) {
         // Redirect to the doctor's dashboard or home page upon successful login
@@ -33,8 +33,8 @@ const LoginComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("Invalid credentials. Please try again.");
-    } finally{
-      setLoader(false)
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -95,11 +95,17 @@ const LoginComponent = ({ setIsLogin }) => {
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-blue-600'} `}
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${
+              loader ? "opacity-70" : "hover:scale-105 hover:bg-blue-600"
+            } `}
             disabled={loader}
           >
-            {loader ? (<div><Loader size="sm" /></div>) : null}
-            {loader ? 'Logging...' : 'Login'}
+            {loader ? (
+              <div>
+                <Loader size="sm" />
+              </div>
+            ) : null}
+            {loader ? "Logging..." : "Login"}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
@@ -139,7 +145,7 @@ const RegisterComponent = ({ setIsLogin }) => {
     }
 
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await apiCalls.registerDoctor(
         name,
         email,
@@ -151,8 +157,8 @@ const RegisterComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
-    } finally{
-      setLoader(false)
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -247,11 +253,17 @@ const RegisterComponent = ({ setIsLogin }) => {
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-blue-600'} `}
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-blue-500 rounded-lg focus:outline-none transition-all duration-300 transform ${
+              loader ? "opacity-70" : "hover:scale-105 hover:bg-blue-600"
+            } `}
             disabled={loader}
           >
-            {loader ? (<div><Loader size="sm" /></div>) : null}
-            {loader ? 'Registering...' : 'Register'}
+            {loader ? (
+              <div>
+                <Loader size="sm" />
+              </div>
+            ) : null}
+            {loader ? "Registering..." : "Register"}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
