@@ -206,13 +206,25 @@ const RegisterComponent = ({ setIsLogin }) => {
             <label className="block text-sm font-medium text-gray-600">
               Specialization
             </label>
-            <input
-              type="text"
+            <select
               value={specialization}
               onChange={(e) => setSpecialization(e.target.value)}
               required
               className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
+            >
+              <option value="" disabled>
+                
+              </option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Cardiology">Cardiology</option>
+              <option value="Neurology">Neurology</option>
+              <option value="Pediatrics">Pediatrics</option>
+              <option value="Orthopedics">Orthopedics</option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="Dermatology">Dermatology</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Radiology">Radiology</option>
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-600">
