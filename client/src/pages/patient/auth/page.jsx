@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiCalls from "../../../core/APICalls";
-import Loader from "../../components/loader"
+import Loader from "../../components/Loader";
 import patientImage from "../../../assets/patient.png"; // Import the patient image
 
 const LoginComponent = ({ setIsLogin }) => {
@@ -20,7 +20,7 @@ const LoginComponent = ({ setIsLogin }) => {
     setError("");
 
     try {
-      setLoader(true)
+      setLoader(true);
       const response = await apiCalls.loginPatient(email, password);
       if (response.status === 200) {
         // Redirect to the doctor's dashboard or home page upon successful login
@@ -31,7 +31,7 @@ const LoginComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("Invalid credentials. Please try again.");
-    } finally{
+    } finally {
       setLoader(false);
     }
   };
@@ -86,11 +86,17 @@ const LoginComponent = ({ setIsLogin }) => {
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className={`flex gap-2 justify-center w-full py-2 text-white bg-green-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-green-600'} `}
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-green-500 rounded-lg focus:outline-none transition-all duration-300 transform ${
+              loader ? "opacity-70" : "hover:scale-105 hover:bg-green-600"
+            } `}
             disabled={loader}
           >
-            {loader ? (<div><Loader size="sm" /></div>) : null}
-            {loader ? 'Logging...' : 'Login'}
+            {loader ? (
+              <div>
+                <Loader size="sm" />
+              </div>
+            ) : null}
+            {loader ? "Logging..." : "Login"}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
@@ -141,8 +147,8 @@ const RegisterComponent = ({ setIsLogin }) => {
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
-    } finally{
-      setLoader(false)
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -229,15 +235,21 @@ const RegisterComponent = ({ setIsLogin }) => {
               className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
             />
           </div>
-          
+
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
             type="submit"
-            className={`flex gap-2 justify-center w-full py-2 text-white bg-green-500 rounded-lg focus:outline-none transition-all duration-300 transform ${loader ? 'opacity-70' : 'hover:scale-105 hover:bg-green-600'} `}
+            className={`flex gap-2 justify-center w-full py-2 text-white bg-green-500 rounded-lg focus:outline-none transition-all duration-300 transform ${
+              loader ? "opacity-70" : "hover:scale-105 hover:bg-green-600"
+            } `}
             disabled={loader}
           >
-            {loader ? (<div><Loader size="sm" /></div>) : null}
-            {loader ? 'Registering...' : 'Register'}
+            {loader ? (
+              <div>
+                <Loader size="sm" />
+              </div>
+            ) : null}
+            {loader ? "Registering..." : "Register"}
           </button>
         </form>
         <p className="mt-4 text-sm text-center text-gray-600">
