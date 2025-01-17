@@ -1,33 +1,54 @@
-// LoginPage.tsx
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiCalls from "../../../core/APICalls";
 import Loader from "../../components/Loader";
-import patientImage from "../../../assets/patient.png"; // Import the patient image
-import { FaArrowLeft } from "react-icons/fa";
+import patientImage from "../../../assets/patient.png";
+import { FaArrowLeft, FaEye, FaEyeSlash } from "react-icons/fa";
+
+// Password validation helper functions
+const hasMinLength = (password) => password.length >= 8;
+const hasUpperCase = (password) => /[A-Z]/.test(password);
+const hasLowerCase = (password) => /[a-z]/.test(password);
+const hasNumber = (password) => /\d/.test(password);
+const hasSpecialChar = (password) => /[!@#$%^&*(),.?":{}|<>]/.test(password);
+const hasNoNullChar = (password) => !/\0/.test(password);
+const hasNoSpaces = (password) => !/\s/.test(password);
+
+const validatePassword = (password) => {
+  const errors = [];
+  if (!hasMinLength(password)) errors.push("At least 8 characters");
+  if (!hasUpperCase(password)) errors.push("At least one uppercase letter");
+  if (!hasLowerCase(password)) errors.push("At least one lowercase letter");
+  if (!hasNumber(password)) errors.push("At least one number");
+  if (!hasSpecialChar(password)) errors.push("At least one special character");
+  if (!hasNoSpaces(password)) errors.push("No spaces allowed");
+  if (!hasNoNullChar(password)) errors.push("Invalid characters detected");
+  return errors;
+};
 
 const LoginComponent = ({ setIsLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loader, setLoader] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Reset the error state
     setError("");
+    
+    // Basic password validation for login
+    if (!password || password.includes('\0')) {
+      setError("Invalid password format");
+      return;
+    }
 
     try {
       setLoader(true);
       const response = await apiCalls.loginPatient(email, password);
       if (response.status === 200) {
-        // Redirect to the doctor's dashboard or home page upon successful login
-        console.log(response);
         window.localStorage.setItem("data", JSON.stringify(response.data.data));
-
         navigate("/dashboard/patient");
       }
     } catch (error) {
@@ -43,7 +64,6 @@ const LoginComponent = ({ setIsLogin }) => {
         className="absolute top-4 left-4 text-white text-2xl cursor-pointer hover:scale-110 transition-transform animate__animated animate__fadeInLeft" 
         onClick={() => navigate('/')}
       />
-      {/* Patient Image */}
       <div className="md:w-1/2 hidden md:flex items-center justify-center">
         <img
           src={patientImage}
@@ -52,7 +72,6 @@ const LoginComponent = ({ setIsLogin }) => {
         />
       </div>
       <div className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-lg animate__animated animate__fadeInRight">
-        {/* Patient Image for Mobile */}
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 md:hidden">
           <img
             src={patientImage}
@@ -80,13 +99,22 @@ const LoginComponent = ({ setIsLogin }) => {
             <label className="block text-sm font-medium text-gray-600">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           {error && <div className="text-sm text-red-500">{error}</div>}
           <button
@@ -96,11 +124,7 @@ const LoginComponent = ({ setIsLogin }) => {
             } `}
             disabled={loader}
           >
-            {loader ? (
-              <div>
-                <Loader size="sm" />
-              </div>
-            ) : null}
+            {loader && <div><Loader size="sm" /></div>}
             {loader ? "Logging..." : "Login"}
           </button>
         </form>
@@ -126,15 +150,29 @@ const RegisterComponent = ({ setIsLogin }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loader, setLoader] = useState(false);
   const [error, setError] = useState("");
+  const [passwordErrors, setPasswordErrors] = useState([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordErrors(validatePassword(newPassword));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Reset the error state
     setError("");
 
-    // Validate that the passwords match
+    // Validate password requirements
+    const errors = validatePassword(password);
+    if (errors.length > 0) {
+      setError("Please fix all password requirements");
+      return;
+    }
+
+    // Validate that passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -142,12 +180,7 @@ const RegisterComponent = ({ setIsLogin }) => {
 
     try {
       setLoader(true);
-      const response = await apiCalls.registerPatient(
-        name,
-        email,
-        password,
-        age
-      );
+      const response = await apiCalls.registerPatient(name, email, password, age);
       if (response.status === 201) {
         setIsLogin(true);
       }
@@ -164,7 +197,6 @@ const RegisterComponent = ({ setIsLogin }) => {
         className="absolute top-4 left-4 text-white text-2xl cursor-pointer hover:scale-110 transition-transform animate__animated animate__fadeInRight" 
         onClick={() => navigate('/')}
       />
-      {/* Patient Image */}
       <div className="md:w-1/2 hidden md:flex items-center justify-center">
         <img
           src={patientImage}
@@ -173,7 +205,6 @@ const RegisterComponent = ({ setIsLogin }) => {
         />
       </div>
       <div className="relative w-full max-w-md p-6 bg-white rounded-lg shadow-lg animate__animated animate__fadeInRight">
-        {/* Patient Image for Mobile */}
         <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 md:hidden">
           <img
             src={patientImage}
@@ -213,25 +244,53 @@ const RegisterComponent = ({ setIsLogin }) => {
             <label className="block text-sm font-medium text-gray-600">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={handlePasswordChange}
+                required
+                className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {passwordErrors.length > 0 && (
+              <div className="mt-2 text-sm text-red-500">
+                Password must have:
+                <ul className="list-disc pl-5">
+                  {passwordErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-600">
               Confirm Password
             </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="w-full px-4 py-2 mt-1 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-600">
@@ -254,11 +313,7 @@ const RegisterComponent = ({ setIsLogin }) => {
             } `}
             disabled={loader}
           >
-            {loader ? (
-              <div>
-                <Loader size="sm" />
-              </div>
-            ) : null}
+            {loader && <div><Loader size="sm" /></div>}
             {loader ? "Registering..." : "Register"}
           </button>
         </form>
