@@ -57,13 +57,13 @@ QuickHeal is a comprehensive healthcare web app designed to connect patients and
 
 ---
 
-## Setup Guidelines
+## *Setup Guidelines*
 
 This guide outlines the setup process for the Quick Heal project, including environment configuration and client/server setup.
 
 ---
 
-## Prerequisites
+### **Prerequisites**
 
 - **Node.js**: Install the latest LTS version of Node.js.
 - **Package Manager**: Use `npm` for installation of packages.
@@ -82,7 +82,7 @@ npm install -g nodemon
 
 ---
 
-## Clone the Repository
+### **Clone the Repository**
 
 1. **Clone the Project**
 
@@ -98,9 +98,8 @@ npm install -g nodemon
 
 ---
 
-## Environment Setup
+### **Environment Setup**
 
-### Environment Variables
 
 Create an `.env` file in both the `client` and `server` directories with the following configurations:
 
@@ -125,7 +124,7 @@ SUPERADMIN_PASSCODE=your_superadmin_passcode_here
 
 ---
 
-## Setting Up Chatbot Integration
+### **Setting Up Chatbot Integration**
 
 1. **Obtain the Chatbot API Key**
 
@@ -142,7 +141,7 @@ SUPERADMIN_PASSCODE=your_superadmin_passcode_here
 
 ---
 
-## Client Setup
+### **Client Setup**
 
 1. **Navigate to the Client Directory**
 
@@ -166,7 +165,7 @@ SUPERADMIN_PASSCODE=your_superadmin_passcode_here
 
 ---
 
-## Server Setup
+### **Server Setup**
 
 1. **Navigate to the Server Directory**
 
