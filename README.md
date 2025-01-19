@@ -219,7 +219,7 @@ QuickHeal ensures data privacy and security with:
 
 - *[Joe Felix A](https://github.com/joefelx)*  (Backend)
 - *[Karim Suhail S](https://github.com/karimsuhail)  (Frontend)*
-- *[Mohammed Haris Hasan A] (https://github.com/Haris-Off)*  (Low Level Design)
+- *[Mohammed Haris Hasan A](https://github.com/Haris-Off)*  (Low Level Design)
 
 ---
 
