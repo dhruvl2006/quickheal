@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../assets/logo.png";
 import FAQSection from "./components/FAQSection";
 import { Link } from "react-router-dom";
-import Bot from "./components/bot"; // Corrected path
+import Bot from "./components/bot";
 
 function Home() {
   console.log(process.env.REACT_APP_SERVER_URL);
@@ -52,7 +52,7 @@ function Home() {
           <p>© 2025 QuickHeal. All rights reserved.</p>
         </div>
       </footer>
-    
+
       {/* Bot Component */}
       <Bot />
     </div>
