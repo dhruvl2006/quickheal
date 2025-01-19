@@ -187,12 +187,6 @@ SUPERADMIN_PASSCODE=your_superadmin_passcode_here
 
    The server will be available at [http://localhost:5000](http://localhost:5000).
 
-4. **Build and Start for Production**
-
-   ```bash
-   npm run build
-   npm start
-   ```
 ---
 
 
