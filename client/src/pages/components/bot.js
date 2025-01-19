@@ -3,8 +3,6 @@ import MediBot from "./medibot";
 import roboIcon from "../../assets/robo.png";
 import "../../styles/chatbot.css";
 
-
-
 function Bot() {
   const [chatbotOpen, setChatbotOpen] = useState(false);
   const [position, setPosition] = useState({ x: 20, y: 20 });
@@ -50,6 +48,7 @@ function Bot() {
         right: `${position.x}px`,
         zIndex: 1000,
       }}
+      title="ChatBot"
     >
       <div
         onClick={handleChatClick}
