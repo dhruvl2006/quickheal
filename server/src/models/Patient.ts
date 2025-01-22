@@ -12,7 +12,11 @@ interface IPatient extends Document {
 const PatientSchema: Schema<IPatient> = new Schema<IPatient>(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true, lowercase: true },
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true,
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']},
     password: { type: String, required: true },
     age: { type: Number, required: true, min: 0 },
   },

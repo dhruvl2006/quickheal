@@ -6,10 +6,22 @@ import jwt from "jsonwebtoken";
 import Doctor from "../models/Doctor";
 import Patient from "../models/Patient";
 import Role from "../types/role";
-
+import { body, validationResult } from 'express-validator';
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET as string;
-
+const validateSignup = [
+  body('name').notEmpty().withMessage('Name is required'),
+  body('email')
+    .isEmail()
+    .withMessage('Please enter a valid email address')
+    .normalizeEmail(),
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
+  body('age')
+    .isInt({ min: 0 })
+    .withMessage('Age must be a positive number'),
+];
 interface IDoctorRegister {
   name: string;
   email: string;
@@ -58,31 +70,48 @@ router.post(
 // Patient Registration
 router.post(
   "/patient/register",
-  async (req: Request<{}, {}, IPatientRegister, null>, res: Response) => {
+  validateSignup,
+  async (req: Request<{}, {}, IPatientRegister>, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return; // Explicit return to stop execution
+    }
+
     const { name, email, password, age } = req.body;
+    
     try {
+      const existingPatient = await Patient.findOne({ email });
+      if (existingPatient) {
+        res.status(400).json({ error: "Email already registered" });
+        return;
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
-
-      const patient = new Patient({
-        name,
-        email,
-        password: hashedPassword,
-        age,
-      });
-
+      const patient = new Patient({ name, email, password: hashedPassword, age });
       const savedPatient = await patient.save();
+
       res.status(201).json({
         message: "Patient registered successfully",
         patient: savedPatient,
       });
+
     } catch (err: any) {
-      res
-        .status(500)
-        .json({ error: "Error registering patient", details: err.message });
+      if (err.name === 'ValidationError') {
+        res.status(400).json({ 
+          error: "Validation Error",
+          details: Object.values(err.errors).map((e: any) => e.message)
+        });
+        return;
+      }
+      
+      res.status(500).json({ 
+        error: "Error registering patient", 
+        details: err.message 
+      });
     }
   }
 );
-
 // Doctor Login
 router.post(
   "/doctor/login",
