@@ -1,10 +1,12 @@
 import React from "react";
-import visit from "../assests/visit.jpeg";
 import logo from "../assets/logo.png";
 import FAQSection from "./components/FAQSection";
 import { Link } from "react-router-dom";
+import Bot from "./components/bot";
+
 function Home() {
   console.log(process.env.REACT_APP_SERVER_URL);
+  console.log("Home component rendered!");
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-900 to-blue-700 text-white">
@@ -26,14 +28,12 @@ function Home() {
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 animate__animated animate__fadeIn animate__delay-0.9s">
-          {/* Doctor Login Button */}
           <Link
             to="/auth/doctor"
             className="text-lg font-semibold px-8 py-4 bg-blue-600 text-white rounded-lg shadow-lg transition-all duration-150 transform hover:scale-105 hover:bg-blue-700 hover:shadow-xl"
           >
             Doctor Login
           </Link>
-          {/* Patient Login Button */}
           <Link
             to="/auth/patient"
             className="text-lg font-semibold px-8 py-4 bg-teal-600 text-white rounded-lg shadow-lg transition-all duration-150 transform hover:scale-105 hover:bg-teal-700 hover:shadow-xl"
@@ -43,19 +43,18 @@ function Home() {
         </div>
       </div>
 
-      {/* FAQ Section */}
-
-      <div className="mt-12 mb-8 px-6 md:px-20 lg:px-32 xl:px-40 ">
+      <div className="mt-12 mb-8 px-6 md:px-20 lg:px-32 xl:px-40">
         <FAQSection />
       </div>
-
-      {/* Footer Section */}
 
       <footer className="w-full py-3 bg-gray-700 text-center text-gray-200 text-sm mt-auto">
         <div className="border-gray-400 mb-3">
           <p>© 2025 QuickHeal. All rights reserved.</p>
         </div>
       </footer>
+
+      {/* Bot Component */}
+      <Bot />
     </div>
   );
 }
