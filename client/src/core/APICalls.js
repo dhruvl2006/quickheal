@@ -1,7 +1,11 @@
 import axios from "axios";
 
 class APICalls {
+<<<<<<< HEAD
+  #server_url = process.env.REACT_APP_SERVER_URL||"http://localhost:3000";
+=======
   #server_url = process.env.REACT_APP_SERVER_URL || "http://localhost:5000";
+>>>>>>> bfb817e65a8199ccedce9b8330a6dce93c20ee5d
 
   async loginDoctor(email, password) {
     const response = await axios.post(
